@@ -1,11 +1,17 @@
-import { HOME_BALANCE, HOME_USER } from "@/constants/data";
+import ListHeading from "@/components/ListHeading";
+import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
+import {
+  HOME_BALANCE,
+  HOME_USER,
+  UPCOMING_SUBSCRIPTIONS,
+} from "@/constants/data";
 import { icons } from "@/constants/icons";
 import images from "@/constants/images";
 import "@/global.css";
 import { formatCurrency } from "@/lib/utils";
 import dayjs from "dayjs";
 import { styled } from "nativewind";
-import { Image, Text, View } from "react-native";
+import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
 const SafeAreaView = styled(RNSafeAreaView);
@@ -20,6 +26,7 @@ export default function App() {
         </View>
         <Image source={icons.add} className="home-add-icon" />
       </View>
+
       <View className="home-balance-card">
         <Text className="home-balance-label">Balance</Text>
         <View className="home-balance-row">
@@ -30,6 +37,26 @@ export default function App() {
             {dayjs(HOME_BALANCE.nextRenewalDate).format("MM/DD")}
           </Text>
         </View>
+      </View>
+
+      <View>
+        <ListHeading title="Upcoming" />
+        <FlatList
+          data={UPCOMING_SUBSCRIPTIONS}
+          renderItem={({ item }) => <UpcomingSubscriptionCard {...item} />}
+          keyExtractor={(item) => item.name}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={
+            <Text className="home-empty-state">
+              No upcoming renewals. Add a subscription to get started!
+            </Text>
+          }
+        />
+      </View>
+
+      <View>
+        <ListHeading title="All Subscriptions" />
       </View>
     </SafeAreaView>
   );
